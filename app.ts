@@ -4,11 +4,15 @@ import { fetchUsersData } from "./services/user.service";
 import { LastSeenUserResult } from "./types/lastSeenUserResult.interface";
 
 async function main(): Promise<number> {
-	const response: LastSeenUserResult = await fetchUsersData(20);
+	try {
+		const response: LastSeenUserResult = await fetchUsersData(20);
+		const users = new Users(response);
 
-	const users = new Users(response);
-
-	return 0;
+		return 0;
+	} catch (error) {
+		console.log(`Error fetching user data: ${error}`);
+		return 1;
+	}
 }
 
 main();
