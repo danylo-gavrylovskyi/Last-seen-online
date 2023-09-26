@@ -11,3 +11,6 @@ export const TODAY = "today";
 export const YESTERDAY = "yesterday";
 export const THIS_WEEK = "this week";
 export const LONG_TIME_AGO = "long time ago";
+
+export const ONE_HOUR_IN_MILLISECONDS =
+	MINUTES_IN_HOUR * SECONDS_IN_MINUTE * MILLISECONDS_IN_SECOND;
