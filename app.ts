@@ -1,12 +1,22 @@
+import * as readline from "node:readline/promises";
+import { stdin as input, stdout as output } from "node:process";
+
 import { Users } from "./entities/users.class";
 
 import { fetchUsersData } from "./services/user.service";
 
 import { displayLastSeenStatus } from "./utils/displayLastSeenStatus";
 
+import * as localization from "./localization";
+
 import { LastSeenUserResult } from "./types/lastSeenUserResult.interface";
 
 async function main(): Promise<number> {
+	const rl = readline.createInterface({ input, output });
+	const selectedLanguage = (await rl.question("Choose language (en / ua): ")) as "en" | "ua";
+
+	const lang = localization[selectedLanguage];
+
 	try {
 		const response: LastSeenUserResult = await fetchUsersData(20);
 		const users = new Users(response);
@@ -15,11 +25,14 @@ async function main(): Promise<number> {
 			const { firstName, lastName, registrationDate, lastSeenDate } = user;
 
 			console.log(
-				`User ${index}:\n${displayLastSeenStatus(
-					user
-				)}\nFirst name - ${firstName}\nLast name - ${lastName}\nRegistration date - ${
-					registrationDate ? new Date(registrationDate) : registrationDate
-				}\nLast seen date - ${lastSeenDate ? new Date(lastSeenDate) : lastSeenDate}\n`
+				`${lang.user} ${index}:\n${displayLastSeenStatus({
+					...user,
+					selectedLanguage,
+				})}\n${lang.firstName} - ${firstName}\n${lang.lastName} - ${lastName}\n${
+					lang.registrationDate
+				} - ${registrationDate ? new Date(registrationDate) : registrationDate}\n${
+					lang.lastSeenDate
+				} - ${lastSeenDate ? new Date(lastSeenDate) : lastSeenDate}\n`
 			);
 		});
 

@@ -2,12 +2,26 @@ import { getLastSeenDate } from "./getLastSeenDate";
 
 import { LastSeenUser } from "../types/lastSeenUser.interface";
 
-export const displayLastSeenStatus = ({ isOnline, nickname, lastSeenDate }: LastSeenUser) => {
+import * as localization from "../localization";
+
+interface DisplayLastSeenStatusProps extends LastSeenUser {
+	selectedLanguage: "en" | "ua";
+}
+
+export const displayLastSeenStatus = ({
+	isOnline,
+	nickname,
+	lastSeenDate,
+	selectedLanguage,
+}: DisplayLastSeenStatusProps) => {
 	if (isOnline) {
-		return `${nickname} is online`;
+		return `${nickname} ${localization[selectedLanguage].isOnline}`;
 	}
 
 	const date = new Date(lastSeenDate);
 
-	return `${nickname} was online ${getLastSeenDate(date)}`;
+	return `${nickname} ${localization[selectedLanguage].wasOnline} ${getLastSeenDate(
+		date,
+		selectedLanguage
+	)}`;
 };
