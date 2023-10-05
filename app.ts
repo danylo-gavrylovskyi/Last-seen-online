@@ -3,7 +3,7 @@ import { stdin as input, stdout as output } from "node:process";
 
 import { Users } from "./entities/users.class";
 
-import { fetchUsersData } from "./services/user.service";
+import { fetchAllUsers } from "./services/user.service";
 
 import { displayLastSeenStatus } from "./utils/displayLastSeenStatus";
 
@@ -18,7 +18,7 @@ async function main(): Promise<number> {
 	const lang = localization[selectedLanguage];
 
 	try {
-		const response: LastSeenUserResult = await fetchUsersData(20);
+		const response: LastSeenUserResult = await fetchAllUsers();
 		const users = new Users(response);
 
 		users.getData().forEach((user, index) => {
