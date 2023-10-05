@@ -1,13 +1,17 @@
+import axios from "axios";
+
 import { LastSeenUser } from "../types/lastSeenUser.interface";
 import { LastSeenUserResult } from "../types/lastSeenUserResult.interface";
 
-const fetchUsersData = async (offset: number): Promise<LastSeenUserResult> => {
-	const data: LastSeenUserResult = await fetch(
+export const fetchUsersData = async (offset: number): Promise<LastSeenUserResult> => {
+	const { data } = await axios.get(
 		`https://sef.podkolzin.consulting/api/users/lastSeen?offset=${offset}`,
 		{
-			mode: "cors",
+			headers: {
+				"Access-Control-Allow-Origin": "*",
+			},
 		}
-	).then((res) => res.json());
+	);
 
 	return data;
 };
