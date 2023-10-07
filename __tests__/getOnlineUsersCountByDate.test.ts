@@ -1,4 +1,4 @@
-import { getOnlineUsersCountByDate } from '../controllers/getHistoricalDataForAll';
+import { getOnlineUsersCountByDate } from '../controllers/getHistoricalDataForAll.controller';
 import { LastSeenUser } from '../types/lastSeenUser.interface';
 
 describe('getOnlineUsersCountByDate', () => {
