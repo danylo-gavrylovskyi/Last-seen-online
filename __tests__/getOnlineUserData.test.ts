@@ -63,8 +63,8 @@ describe('getOnlineUsersCountByDate', () => {
     expect(res.wasUserOnline).toBeNull();
   });
 
-  it('should return res where wasUserOnline is true than nearestOnlineTime is always null', () => {
-    const res = getOnlineUserData(mockUsers, '1', new Date('02.09.2023'));
+  it('should return res where if wasUserOnline is true than nearestOnlineTime is always null', () => {
+    const res = getOnlineUserData(mockUsers, '2', new Date('02.09.2023'));
     expect(res.wasUserOnline).toBe(true);
     expect(res.nearestOnlineTime).toBeNull();
   });

@@ -12,4 +12,27 @@ export const getOnlineUserData = (
   users: LastSeenUser[],
   userId: string,
   date: Date,
-): WasUserOnline => {};
+): WasUserOnline => {
+  const userTimespans = users
+    .filter((user) => user.userId === userId)
+    .map((user) => String(user.lastSeenDate));
+
+  if (!userTimespans.length) {
+    return {
+      wasUserOnline: null,
+      nearestOnlineTime: null,
+    };
+  }
+
+  if (userTimespans.includes(String(date))) {
+    return {
+      wasUserOnline: true,
+      nearestOnlineTime: null,
+    };
+  }
+
+  return {
+    wasUserOnline: false,
+    nearestOnlineTime: null,
+  };
+};
