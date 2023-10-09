@@ -77,6 +77,6 @@ describe('getOnlineUsersCountByDate', () => {
 
   it('should return res where nearestOnlineTime is a field where the clothest time when user was online is specified', () => {
     const res = getOnlineUserData(mockUsers, '3', new Date('02.09.2023'));
-    expect(res.nearestOnlineTime).toBe(new Date('01.09.2023'));
+    expect(res.nearestOnlineTime).toStrictEqual(new Date('01.09.2023'));
   });
 });
