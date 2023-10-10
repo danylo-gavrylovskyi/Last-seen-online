@@ -19,7 +19,7 @@ describe('predictNumberOfUsers', () => {
       firstName: 'second',
       lastName: 'user',
       registrationDate: new Date('01.01.1990'),
-      lastSeenDate: new Date('02.09.2023'),
+      lastSeenDate: new Date('2023-10-05T15:30:00'),
       isOnline: false,
     },
     {
@@ -37,7 +37,7 @@ describe('predictNumberOfUsers', () => {
       firstName: 'fourth',
       lastName: 'user',
       registrationDate: new Date('01.01.1990'),
-      lastSeenDate: new Date('02.09.2023'),
+      lastSeenDate: new Date('2023-10-05T15:30:00'),
       isOnline: false,
     },
   ];
@@ -54,7 +54,7 @@ describe('predictNumberOfUsers', () => {
   });
 
   it('should return the predicted number of online users for a specified date in the future', () => {
-    const res = predictNumberOfUsers(mockUsers, new Date('2025-09-02T20:00:00'));
+    const res = predictNumberOfUsers(mockUsers, new Date('2025-10-09T15:30:00'));
     expect(res.onlineUsers).toBe(2);
   });
 });
