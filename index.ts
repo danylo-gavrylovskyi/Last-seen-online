@@ -13,3 +13,5 @@ app.get('/api/stats/users', getHistoricalDataForAll);
 app.get('/api/stats/user', getHistoricalDataForUser);
 
 app.get('/api/predictions/users', predictOnlineUsersCount);
+
+app.get('/api/predictions/user', predictUserOnlineStatus);
