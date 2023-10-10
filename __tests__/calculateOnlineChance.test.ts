@@ -18,7 +18,7 @@ describe('calculateUserOnlineChance', () => {
       firstName: 'second',
       lastName: 'user',
       registrationDate: new Date('01.01.1990'),
-      lastSeenDate: new Date('01.09.2023'),
+      lastSeenDate: new Date('2023-08-02T15:30:00'),
       isOnline: false,
     },
     {
@@ -49,14 +49,14 @@ describe('calculateUserOnlineChance', () => {
   });
 
   it('should return res where willBeOnline and onlineChance are null if the system has no historical data for the user', () => {
-    const res = calculateUserOnlineChance(mockUsers, '4', new Date('2025-10-09T15:30:00'), 0.85);
-    expect(res).toBeNull();
-    expect(res).toBeNull();
+    const res = calculateUserOnlineChance([], '4', new Date('2025-10-09T15:30:00'), 0.85);
+    expect(res.onlineChance).toBeNull();
+    expect(res.willBeOnline).toBeNull();
   });
 
   it('should return res where onlineChance field represents the calculated chance that the user will be online on the specified date based on historical data.', () => {
     const res = calculateUserOnlineChance(mockUsers, '4', new Date('2025-10-09T15:30:00'), 0.85);
     const chance = 1 / 3;
-    expect(res).toBe(chance);
+    expect(res.onlineChance).toBe(chance);
   });
 });
