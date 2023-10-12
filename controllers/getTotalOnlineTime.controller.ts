@@ -1,10 +1,27 @@
+import { Request, Response } from 'express';
+import { LastSeenUserResult } from '../types/lastSeenUserResult.interface';
+import { fetchAllUsers } from '../services/user.service';
+import { Users } from '../entities/users.class';
 import { LastSeenUser } from '../types/lastSeenUser.interface';
 
 interface TotalOnlineTimeRes {
   totalTime: number | null;
 }
 
-export const getTotalOnlineTime = () => {};
+export const getTotalOnlineTime = async (req: Request, res: Response) => {
+  const userId = req.query.userId as string;
+
+  const response: LastSeenUserResult = await fetchAllUsers();
+  const users: LastSeenUser[] = new Users(response).getData();
+
+  if (!users.find((user) => user.userId === userId)) {
+    return res.status(404).json('Invalid userId is passed');
+  }
+
+  const result = getUserTotalOnlineTime(users, userId);
+
+  return res.status(200).json(result);
+};
 
 export const getUserTotalOnlineTime = (
   data: LastSeenUser[],
