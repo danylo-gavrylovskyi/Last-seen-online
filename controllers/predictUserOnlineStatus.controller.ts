@@ -47,8 +47,6 @@ export const calculateUserOnlineChance = (
     ),
   ];
 
-  console.log(wasOnlineAtThisWeekdayAtThisTime, uniqueWeeks);
-
   const chance = wasOnlineAtThisWeekdayAtThisTime.length / uniqueWeeks.length;
 
   const willBeOnline = chance > tolerance;

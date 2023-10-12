@@ -23,17 +23,7 @@ export const predictOnlineUsersCount = async (req: Request, res: Response) => {
 };
 
 export const predictNumberOfUsers = (users: LastSeenUser[], date: Date): OnlineUsersPrediction => {
-  const dayAndTimeOccurrence: Date[] = [];
-
-  for (const user of users) {
-    if (
-      !dayAndTimeOccurrence.some((occurr) => String(occurr) === String(user.lastSeenDate)) &&
-      user.lastSeenDate?.getDay() === date.getDay() &&
-      user.lastSeenDate.getHours() === date.getHours()
-    ) {
-      dayAndTimeOccurrence.push(user.lastSeenDate);
-    }
-  }
+  const dayAndTimeOccurrence: Date[] = getdayAndTimeOccurrence(users, date);
 
   const onlineUsersInGivenDate = users.filter((user) => {
     if (
@@ -54,4 +44,20 @@ export const predictNumberOfUsers = (users: LastSeenUser[], date: Date): OnlineU
   return {
     onlineUsers: average,
   };
+};
+
+const getdayAndTimeOccurrence = (users: LastSeenUser[], date: Date) => {
+  const dayAndTimeOccurrence: Date[] = [];
+
+  for (const user of users) {
+    if (
+      !dayAndTimeOccurrence.some((occurr) => String(occurr) === String(user.lastSeenDate)) &&
+      user.lastSeenDate?.getDay() === date.getDay() &&
+      user.lastSeenDate.getHours() === date.getHours()
+    ) {
+      dayAndTimeOccurrence.push(user.lastSeenDate);
+    }
+  }
+
+  return dayAndTimeOccurrence;
 };

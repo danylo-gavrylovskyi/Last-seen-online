@@ -1,6 +1,6 @@
-import { predictNumberOfUsers } from '../controllers/predictOnlineUsersCount.controller';
+import { predictNumberOfUsers } from '../../controllers/predictOnlineUsersCount.controller';
 
-import { LastSeenUser } from '../types/lastSeenUser.interface';
+import { LastSeenUser } from '../../types/lastSeenUser.interface';
 
 describe('predictNumberOfUsers', () => {
   const mockUsers: LastSeenUser[] = [

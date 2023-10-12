@@ -1,6 +1,6 @@
-import { getOnlineUserData } from '../controllers/getHistoricalDataForUser.controller';
+import { getOnlineUserData } from '../../controllers/getHistoricalDataForUser.controller';
 
-import { LastSeenUser } from '../types/lastSeenUser.interface';
+import { LastSeenUser } from '../../types/lastSeenUser.interface';
 
 describe('getOnlineUsersCountByDate', () => {
   const mockUsers: LastSeenUser[] = [

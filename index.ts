@@ -4,6 +4,7 @@ import { getHistoricalDataForAll } from './controllers/getHistoricalDataForAll.c
 import { getHistoricalDataForUser } from './controllers/getHistoricalDataForUser.controller';
 import { predictOnlineUsersCount } from './controllers/predictOnlineUsersCount.controller';
 import { predictUserOnlineStatus } from './controllers/predictUserOnlineStatus.controller';
+import { getTotalOnlineTime } from './controllers/getTotalOnlineTime.controller';
 
 const app = express();
 app.use(express.json());

@@ -1,5 +1,5 @@
-import { calculateUserOnlineChance } from '../controllers/predictUserOnlineStatus.controller';
-import { LastSeenUser } from '../types/lastSeenUser.interface';
+import { calculateUserOnlineChance } from '../../controllers/predictUserOnlineStatus.controller';
+import { LastSeenUser } from '../../types/lastSeenUser.interface';
 
 describe('calculateUserOnlineChance', () => {
   const mockUsers: LastSeenUser[] = [
