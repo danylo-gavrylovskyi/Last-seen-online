@@ -3,6 +3,7 @@ import express from 'express';
 import { getHistoricalDataForAll } from './controllers/getHistoricalDataForAll.controller';
 import { getHistoricalDataForUser } from './controllers/getHistoricalDataForUser.controller';
 import { predictOnlineUsersCount } from './controllers/predictOnlineUsersCount.controller';
+import { predictUserOnlineStatus } from './controllers/predictUserOnlineStatus.controller';
 
 const app = express();
 app.use(express.json());
@@ -15,3 +16,5 @@ app.get('/api/stats/user', getHistoricalDataForUser);
 app.get('/api/predictions/users', predictOnlineUsersCount);
 
 app.get('/api/predictions/user', predictUserOnlineStatus);
+
+app.get('/api/stats/user/total', getTotalOnlineTime);
