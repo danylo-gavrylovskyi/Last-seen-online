@@ -29,7 +29,7 @@ export const getUserTotalOnlineTime = (
 ): TotalOnlineTimeRes => {
   const userData = data.filter((entry) => entry.userId === userId);
 
-  if (userData.length === 0) {
+  if (!userData.length) {
     return { totalTime: null };
   }
 
