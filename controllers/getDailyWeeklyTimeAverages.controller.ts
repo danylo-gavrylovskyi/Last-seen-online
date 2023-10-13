@@ -20,4 +20,43 @@ export const getDailyWeeklyTimeAverages = async (req: Request, res: Response) =>
   return res.status(200).json(averages);
 };
 
-export const calculateAverages = (users: LastSeenUser[], userId: string): Averages => {};
+export const calculateAverages = (users: LastSeenUser[], userId: string): Averages => {
+  const userOnlineData = users.filter((entry) => entry.userId === userId);
+
+  if (!userOnlineData.length) {
+    return { weeklyAverage: null, dailyAverage: null };
+  }
+
+  let dailyOnlineTime = 0;
+  let weeklyOnlineTime = 0;
+  let dailyOnlineTimePerDay = 0;
+  let daysInWeek = 0;
+
+  let previousDate = null;
+
+  for (const entry of userOnlineData) {
+    if (entry.isOnline && entry.lastSeenDate) {
+      const currentDate = new Date(entry.lastSeenDate);
+
+      if (previousDate) {
+        const timeDifference = currentDate.getTime() - previousDate.getTime();
+        dailyOnlineTimePerDay += timeDifference;
+        weeklyOnlineTime += timeDifference;
+
+        if (currentDate.getDay() !== previousDate.getDay()) {
+          dailyOnlineTime += dailyOnlineTimePerDay;
+          dailyOnlineTimePerDay = 0;
+          daysInWeek += 1;
+        }
+      }
+
+      previousDate = currentDate;
+    }
+  }
+
+  const numberOfDays = daysInWeek > 0 ? daysInWeek : 1;
+  const dailyAverage = dailyOnlineTime / numberOfDays / 1000;
+  const weeklyAverage = weeklyOnlineTime / (numberOfDays / 7) / 1000;
+
+  return { weeklyAverage, dailyAverage };
+};
