@@ -11,6 +11,8 @@ import * as localization from "./localization";
 
 import { LastSeenUserResult } from "./types/lastSeenUserResult.interface";
 
+export let users = new Users({} as LastSeenUserResult);
+
 export async function main(): Promise<number> {
 	const rl = readline.createInterface({ input, output });
 	const selectedLanguage = (await rl.question("Choose language (en / ua): ")) as "en" | "ua";
@@ -19,7 +21,7 @@ export async function main(): Promise<number> {
 
 	try {
 		const response: LastSeenUserResult = await fetchAllUsers();
-		const users = new Users(response);
+		users = new Users(response);
 
 		setInterval(async () => {
 			console.log("Loading data");
@@ -29,10 +31,10 @@ export async function main(): Promise<number> {
 		}, 5000);
 
 		users.getData().forEach((user, index) => {
-			const { firstName, lastName, registrationDate, lastSeenDate } = user;
+			const { firstName, lastName, registrationDate, lastSeenDate, userId } = user;
 
 			console.log(
-				`${lang.user} ${index}:\n${displayLastSeenStatus({
+				`${lang.user} ${userId}:\n${displayLastSeenStatus({
 					...user,
 					selectedLanguage,
 				})}\n${lang.firstName} - ${firstName}\n${lang.lastName} - ${lastName}\n${
