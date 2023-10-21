@@ -14,7 +14,7 @@ export const displayLastSeenStatus = ({
 	lastSeenDate,
 	selectedLanguage,
 }: DisplayLastSeenStatusProps) => {
-	if (isOnline) {
+	if (isOnline || !lastSeenDate) {
 		return `${nickname} ${localization[selectedLanguage].isOnline}`;
 	}
 
