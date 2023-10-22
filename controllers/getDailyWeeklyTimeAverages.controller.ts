@@ -1,62 +1,58 @@
-import { Request, Response } from 'express';
-import { LastSeenUser } from '../types/lastSeenUser.interface';
-import { fetchAllUsers } from '../services/user.service';
-import { LastSeenUserResult } from '../types/lastSeenUserResult.interface';
-import { Users } from '../entities/users.class';
+import { Request, Response } from "express";
+import { LastSeenUser } from "../types/lastSeenUser.interface";
+import { fetchAllUsers } from "../services/user.service";
+import { LastSeenUserResult } from "../types/lastSeenUserResult.interface";
+import { Users } from "../entities/users.class";
+import { transformUser } from "../utils/transformer";
+import { users } from "../app";
+import { getWeekNumber } from "./predictUserOnlineStatus.controller";
 
 interface Averages {
-  weeklyAverage: number | null;
-  dailyAverage: number | null;
+	weeklyAverage: number | null;
+	dailyAverage: number | null;
 }
 
 export const getDailyWeeklyTimeAverages = async (req: Request, res: Response) => {
-  const userId = req.query.userId as string;
+	const userId = req.query.userId as string;
 
-  const response: LastSeenUserResult = await fetchAllUsers();
-  const users: LastSeenUser[] = new Users(response).getData();
+	const usersData = users.getData();
 
-  const averages = calculateAverages(users, userId);
+	const averages = calculateAverages(usersData, userId);
 
-  return res.status(200).json(averages);
+	return res.status(200).json(averages);
 };
 
 export const calculateAverages = (users: LastSeenUser[], userId: string): Averages => {
-  const userOnlineData = users.filter((entry) => entry.userId === userId);
+	const userData = users.filter((entry) => entry.userId === userId);
 
-  if (!userOnlineData.length) {
-    return { weeklyAverage: null, dailyAverage: null };
-  }
+	if (!userData.length) {
+		return { weeklyAverage: null, dailyAverage: null };
+	}
 
-  let dailyOnlineTime = 0;
-  let weeklyOnlineTime = 0;
-  let dailyOnlineTimePerDay = 0;
-  let daysInWeek = 0;
+	const userTimeSpans = transformUser(userData);
 
-  let previousDate = null;
+	let totalOnlineTime: number = 0;
+	let totalNumberOfDays: number = 0;
+	let prevDay: number = -1;
 
-  for (const entry of userOnlineData) {
-    if (entry.isOnline && entry.lastSeenDate) {
-      const currentDate = new Date(entry.lastSeenDate);
+	let prevWeek: string = "";
+	let totalNumberOfWeeks: number = 0;
 
-      if (previousDate) {
-        const timeDifference = currentDate.getTime() - previousDate.getTime();
-        dailyOnlineTimePerDay += timeDifference;
-        weeklyOnlineTime += timeDifference;
+	userTimeSpans.forEach((timeSpan) => {
+		if (!timeSpan.login || !timeSpan.logout) return;
 
-        if (currentDate.getDay() !== previousDate.getDay()) {
-          dailyOnlineTime += dailyOnlineTimePerDay;
-          dailyOnlineTimePerDay = 0;
-          daysInWeek += 1;
-        }
-      }
+		if (timeSpan.login.getDay() !== prevDay) {
+			totalNumberOfDays++;
+			prevDay = timeSpan.login?.getDay();
+		}
 
-      previousDate = currentDate;
-    }
-  }
+		if (getWeekNumber(timeSpan.login) !== prevWeek) totalNumberOfWeeks++;
 
-  const numberOfDays = daysInWeek > 0 ? daysInWeek : 1;
-  const dailyAverage = dailyOnlineTime / numberOfDays / 1000;
-  const weeklyAverage = weeklyOnlineTime / (numberOfDays / 7) / 1000;
+		totalOnlineTime += (timeSpan.logout.getTime() - timeSpan.login.getTime()) / 1000;
+	});
 
-  return { weeklyAverage, dailyAverage };
+	return {
+		weeklyAverage: totalOnlineTime / totalNumberOfWeeks,
+		dailyAverage: totalOnlineTime / totalNumberOfDays,
+	};
 };
