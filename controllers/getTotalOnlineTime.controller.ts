@@ -36,7 +36,7 @@ export const getUserTotalOnlineTime = (
 	let totalTime: number = 0;
 	userTimeSpans.forEach((timeSpan) => {
 		if (timeSpan.login && timeSpan.logout) {
-			totalTime += timeSpan.logout.getTime() - timeSpan.login.getTime();
+			totalTime += (timeSpan.logout.getTime() - timeSpan.login.getTime()) / 1000;
 		}
 	});
 
