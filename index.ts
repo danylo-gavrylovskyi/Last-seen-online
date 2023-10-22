@@ -7,6 +7,7 @@ import { predictUserOnlineStatus } from "./controllers/predictUserOnlineStatus.c
 import { getTotalOnlineTime } from "./controllers/getTotalOnlineTime.controller";
 import { getDailyWeeklyTimeAverages } from "./controllers/getDailyWeeklyTimeAverages.controller";
 import { main } from "./app";
+import { forgetUser } from "./controllers/forgetUser";
 
 const app = express();
 app.use(express.json());
@@ -25,3 +26,5 @@ app.get("/api/predictions/user", predictUserOnlineStatus);
 app.get("/api/stats/user/total", getTotalOnlineTime);
 
 app.get("/api/stats/user/average", getDailyWeeklyTimeAverages);
+
+app.get("/api/user/forget", forgetUser);

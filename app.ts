@@ -10,8 +10,10 @@ import { displayLastSeenStatus } from "./utils/displayLastSeenStatus";
 import * as localization from "./localization";
 
 import { LastSeenUserResult } from "./types/lastSeenUserResult.interface";
+import { LastSeenUser } from "./types/lastSeenUser.interface";
 
 export let users = new Users({} as LastSeenUserResult);
+export let bannedUsers: LastSeenUser[] = [];
 
 export async function main(): Promise<number> {
 	const rl = readline.createInterface({ input, output });
