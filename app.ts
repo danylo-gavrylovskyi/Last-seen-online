@@ -10,15 +10,15 @@ import { displayLastSeenStatus } from "./utils/displayLastSeenStatus";
 import * as localization from "./localization";
 
 import { LastSeenUserResult } from "./types/lastSeenUserResult.interface";
-import { LastSeenUser } from "./types/lastSeenUser.interface";
 
 export let users = new Users({} as LastSeenUserResult);
-export let bannedUsers: LastSeenUser[] = [];
+export let bannedUsers: string[] = [];
 
 export async function main(): Promise<number> {
-	const rl = readline.createInterface({ input, output });
-	const selectedLanguage = (await rl.question("Choose language (en / ua): ")) as "en" | "ua";
+	// const rl = readline.createInterface({ input, output });
+	// const selectedLanguage = (await rl.question("Choose language (en / ua): ")) as "en" | "ua";
 
+	const selectedLanguage = "en"; // e2e fix
 	const lang = localization[selectedLanguage];
 
 	try {

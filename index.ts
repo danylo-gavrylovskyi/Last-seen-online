@@ -28,3 +28,5 @@ app.get("/api/stats/user/total", getTotalOnlineTime);
 app.get("/api/stats/user/average", getDailyWeeklyTimeAverages);
 
 app.get("/api/user/forget", forgetUser);
+
+export const server = app;

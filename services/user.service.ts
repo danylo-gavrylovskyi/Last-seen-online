@@ -2,6 +2,7 @@ import axios from "axios";
 
 import { LastSeenUser } from "../types/lastSeenUser.interface";
 import { LastSeenUserResult } from "../types/lastSeenUserResult.interface";
+import { bannedUsers } from "../app";
 
 export const fetchUsersData = async (offset: number): Promise<LastSeenUserResult> => {
 	const { data } = await axios.get(
@@ -32,6 +33,7 @@ export const fetchAllUsers = async (): Promise<LastSeenUserResult> => {
 			break;
 		}
 
+		response.data = response.data.filter((user) => !bannedUsers.includes(user.userId));
 		data.push(...response.data);
 
 		offset += data.length;

@@ -1,6 +1,5 @@
 import { calculateAverages } from "../../controllers/getDailyWeeklyTimeAverages.controller";
 import { LastSeenUser } from "../../types/lastSeenUser.interface";
-import { transformUser } from "../../utils/transformer";
 
 describe("calculateAverages", () => {
 	const mockUsers: LastSeenUser[] = [

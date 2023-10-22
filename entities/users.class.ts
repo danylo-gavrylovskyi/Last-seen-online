@@ -14,6 +14,10 @@ export class Users {
 		this.data = [...this.data, ...newData];
 	}
 
+	setData(newData: LastSeenUser[]) {
+		this.data = newData;
+	}
+
 	getData() {
 		return this.data;
 	}
