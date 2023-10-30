@@ -8,6 +8,7 @@ import { getTotalOnlineTime } from "./controllers/getTotalOnlineTime.controller"
 import { getDailyWeeklyTimeAverages } from "./controllers/getDailyWeeklyTimeAverages.controller";
 import { main } from "./app";
 import { forgetUser } from "./controllers/forgetUser";
+import { createReport } from "./controllers/createReport";
 
 const app = express();
 app.use(express.json());
@@ -28,5 +29,7 @@ app.get("/api/stats/user/total", getTotalOnlineTime);
 app.get("/api/stats/user/average", getDailyWeeklyTimeAverages);
 
 app.get("/api/user/forget", forgetUser);
+
+app.post("/api/report/:reportName", createReport);
 
 export const server = app;
