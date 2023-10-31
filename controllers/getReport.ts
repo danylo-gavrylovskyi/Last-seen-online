@@ -3,6 +3,8 @@ import { LastSeenUser } from "../types/lastSeenUser.interface";
 import { ResponseReport, UserReport } from "../types/report.interface";
 import { calculateDailyWeeklyAvg } from "../utils/calculateDailyWeeklyAvg";
 import { reports, users } from "../app";
+import { getTotalOnlineTime } from "../utils/getTotalOnlineTime";
+import { getMinMaxDaily } from "../utils/getMinMaxDaily";
 
 interface ReceivedReport {
 	userId: string;
@@ -47,6 +49,21 @@ export const retrieveReport = (
 				case "weeklyAverage": {
 					const averages = calculateDailyWeeklyAvg(userData, from, to);
 					metrics.push({ weeklyAverage: averages.weeklyAverage });
+					break;
+				}
+				case "total": {
+					const total = getTotalOnlineTime(userData, from, to);
+					metrics.push({ total: total.totalTime });
+					break;
+				}
+				case "min": {
+					const { min } = getMinMaxDaily(userData, from, to);
+					metrics.push({ min });
+					break;
+				}
+				case "max": {
+					const { max } = getMinMaxDaily(userData, from, to);
+					metrics.push({ max });
 					break;
 				}
 				default:

@@ -7,7 +7,7 @@ export interface UserReport {
 export interface ResponseReport {
 	dailyAverage?: number | null;
 	weeklyAverage?: number | null;
-	total?: number;
-	min?: number;
-	max?: number;
+	total?: number | null;
+	min?: number | null;
+	max?: number | null;
 }
