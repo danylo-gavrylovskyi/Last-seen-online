@@ -29,7 +29,7 @@ export const predictNumberOfUsers = (users: LastSeenUser[], date: Date): OnlineU
 		if (
 			user.lastSeenDate &&
 			new Date(user.lastSeenDate).getDay() === date.getDay() &&
-			user.lastSeenDate.getHours() === date.getHours()
+			new Date(user.lastSeenDate).getHours() === date.getHours()
 		) {
 			return user.lastSeenDate;
 		}
@@ -55,7 +55,7 @@ const getdayAndTimeOccurrence = (users: LastSeenUser[], date: Date) => {
 			user.lastSeenDate &&
 			!dayAndTimeOccurrence.some((occurr) => String(occurr) === String(user.lastSeenDate)) &&
 			new Date(user.lastSeenDate).getDay() === date.getDay() &&
-			user.lastSeenDate.getHours() === date.getHours()
+			new Date(user.lastSeenDate).getHours() === date.getHours()
 		) {
 			dayAndTimeOccurrence.push(user.lastSeenDate);
 		}

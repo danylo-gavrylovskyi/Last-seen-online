@@ -10,9 +10,11 @@ import { displayLastSeenStatus } from "./utils/displayLastSeenStatus";
 import * as localization from "./localization";
 
 import { LastSeenUserResult } from "./types/lastSeenUserResult.interface";
+import { UserReport } from "./types/report.interface";
 
 export let users = new Users({} as LastSeenUserResult);
 export let bannedUsers: string[] = [];
+export let reports: UserReport[] = [];
 
 export async function main(): Promise<number> {
 	// const rl = readline.createInterface({ input, output });
@@ -32,7 +34,7 @@ export async function main(): Promise<number> {
 			console.log("Data loaded");
 		}, 5000);
 
-		users.getData().forEach((user, index) => {
+		users.getData().forEach((user) => {
 			const { firstName, lastName, registrationDate, lastSeenDate, userId } = user;
 
 			console.log(

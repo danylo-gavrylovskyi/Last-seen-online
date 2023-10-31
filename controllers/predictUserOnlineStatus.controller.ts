@@ -39,7 +39,7 @@ export const calculateUserOnlineChance = (
 		(user) =>
 			user.lastSeenDate &&
 			new Date(user.lastSeenDate).getDay() === date.getDay() &&
-			user.lastSeenDate?.getHours() === date.getHours()
+			new Date(user.lastSeenDate).getHours() === date.getHours()
 	);
 
 	const uniqueWeeks = [
@@ -61,7 +61,9 @@ export const calculateUserOnlineChance = (
 export const getWeekNumber = (date: Date): string => {
 	const year = new Date(date).getFullYear();
 	const startOfYear = new Date(year, 0, 1);
-	const days = Math.floor((date.getTime() - startOfYear.getTime()) / (24 * 60 * 60 * 1000));
+	const days = Math.floor(
+		(new Date(date).getTime() - startOfYear.getTime()) / (24 * 60 * 60 * 1000)
+	);
 	const weekNumber = String(Math.ceil((days + 1) / 7)).padStart(2, "0");
 	return `${year}-${weekNumber}`;
 };
