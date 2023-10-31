@@ -8,14 +8,12 @@ interface Averages {
 }
 
 export const calculateDailyWeeklyAvg = (
-	users: LastSeenUser[],
-	userId: string,
+	givenUserData: LastSeenUser[],
 	fromDate: Date,
 	toDate: Date
 ): Averages => {
-	const userData = users.filter((entry) => {
+	const userData = givenUserData.filter((entry) => {
 		if (
-			entry.userId === userId &&
 			entry.lastSeenDate &&
 			entry.lastSeenDate.getTime() > fromDate.getTime() &&
 			entry.lastSeenDate.getTime() < toDate.getTime()

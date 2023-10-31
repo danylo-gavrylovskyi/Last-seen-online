@@ -7,8 +7,8 @@ describe("retrieveReport", () => {
 	const reports: UserReport[] = [
 		{
 			name: "testReport1",
-			metrics: ["dailyAverage", "weeklyAverage "],
-			users: ["1"],
+			metrics: ["dailyAverage", "weeklyAverage"],
+			users: ["user1"],
 		},
 	];
 	const mockUsers: LastSeenUser[] = [
@@ -51,20 +51,36 @@ describe("retrieveReport", () => {
 	];
 
 	it("should return empty object if report is not found", () => {
-		const res = retrieveReport(reports);
-		expect(res).toStrictEqual({});
+		const res = retrieveReport(
+			mockUsers,
+			reports,
+			"error",
+			new Date("2022-01-01T10:00:00Z"),
+			new Date("2024-08-01T15:00:00Z")
+		);
+		expect(res).toStrictEqual([]);
 	});
 
 	it("should return 'metrics' field with 'dailyAverage' and 'weeklyAverage' objects inside", () => {
-		const res = retrieveReport(mockUsers, reports);
-		expect(res.metrics[0]).toHaveProperty("dailyAverage");
-		expect(res.metrics[1]).toHaveProperty("weeksAverage");
+		const res = retrieveReport(
+			mockUsers,
+			reports,
+			"testReport1",
+			new Date("2022-01-01T10:00:00Z"),
+			new Date("2024-08-01T15:00:00Z")
+		);
+
+		if (!res) return undefined;
+
+		expect(res[0].metrics[0]).toHaveProperty("dailyAverage");
+		expect(res[0].metrics[1]).toHaveProperty("weeklyAverage");
 	});
 
 	it("should return daily and weekly averages for a user", () => {
-		const averages = calculateDailyWeeklyAvg(
+		const res = retrieveReport(
 			mockUsers,
-			"user1",
+			reports,
+			"testReport1",
 			new Date("2022-01-01T10:00:00Z"),
 			new Date("2024-08-01T15:00:00Z")
 		);
@@ -72,7 +88,9 @@ describe("retrieveReport", () => {
 		const expectedDailyAvg = (3 * 3600) / 2;
 		const expectedWeeklyAvg = (3 * 3600) / 2;
 
-		expect(averages.dailyAverage).toBe(expectedDailyAvg);
-		expect(averages.weeklyAverage).toBe(expectedWeeklyAvg);
+		if (!res) return undefined;
+
+		expect(res[0].metrics[0].dailyAverage).toBe(expectedDailyAvg);
+		expect(res[0].metrics[1].weeklyAverage).toBe(expectedWeeklyAvg);
 	});
 });

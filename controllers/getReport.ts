@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { LastSeenUser } from "../types/lastSeenUser.interface";
-import { fetchAllUsers } from "../services/user.service";
-import { Users } from "../entities/users.class";
 import { ResponseReport, UserReport } from "../types/report.interface";
+import { calculateDailyWeeklyAvg } from "../utils/calculateDailyWeeklyAvg";
+import { reports, users } from "../app";
 
 interface ReceivedReport {
 	userId: string;
@@ -14,9 +14,48 @@ export const getReport = async (req: Request, res: Response) => {
 	const from = req.query.date as string;
 	const to = req.query.date as string;
 
-	const result = retrieveReport();
+	const usersData = users.getData();
+
+	const result = retrieveReport(usersData, reports, reportName, new Date(from), new Date(to));
 
 	return res.status(200).json(result);
 };
 
-export const retrieveReport = (): ReceivedReport => {};
+export const retrieveReport = (
+	users: LastSeenUser[],
+	reports: UserReport[],
+	reportName: string,
+	from: Date,
+	to: Date
+): ReceivedReport[] | undefined => {
+	const report = reports.find((rep) => rep.name === reportName);
+	if (!report) return [];
+
+	let response: ReceivedReport[] = [];
+
+	report.users.forEach((userFromReport) => {
+		const userData = users.filter((user) => user.userId === userFromReport);
+		const metrics: ResponseReport[] = [];
+
+		report.metrics.forEach((metric) => {
+			switch (metric) {
+				case "dailyAverage": {
+					const averages = calculateDailyWeeklyAvg(userData, from, to);
+					metrics.push({ dailyAverage: averages.dailyAverage });
+					break;
+				}
+				case "weeklyAverage": {
+					const averages = calculateDailyWeeklyAvg(userData, from, to);
+					metrics.push({ weeklyAverage: averages.weeklyAverage });
+					break;
+				}
+				default:
+					break;
+			}
+		});
+
+		response.push({ userId: userFromReport, metrics });
+	});
+
+	return response;
+};
