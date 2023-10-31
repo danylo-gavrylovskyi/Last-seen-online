@@ -2,7 +2,6 @@ import { server } from "../../index";
 import supertest from "supertest";
 const requestWithSupertest = supertest(server);
 
-const API_URL = "http://localhost:3001";
 const USER_ID = "61fbd1a7-2358-9782-7f2f-25a0b8d0fc37";
 
 describe("e2e tests", () => {
