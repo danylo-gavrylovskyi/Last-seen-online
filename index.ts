@@ -1,4 +1,7 @@
 import express from "express";
+import { Request, Response } from "express";
+
+import { main, users } from "./app";
 
 import { getHistoricalDataForAll } from "./controllers/getHistoricalDataForAll.controller";
 import { getHistoricalDataForUser } from "./controllers/getHistoricalDataForUser.controller";
@@ -6,16 +9,40 @@ import { predictOnlineUsersCount } from "./controllers/predictOnlineUsersCount.c
 import { predictUserOnlineStatus } from "./controllers/predictUserOnlineStatus.controller";
 import { getTotalOnlineTime } from "./controllers/getTotalOnlineTime.controller";
 import { getDailyWeeklyTimeAverages } from "./controllers/getDailyWeeklyTimeAverages.controller";
-import { main } from "./app";
 import { forgetUser } from "./controllers/forgetUser";
 import { createReport } from "./controllers/createReport";
 import { getReport } from "./controllers/getReport";
 
+import { displayLastSeenStatus } from "./utils/displayLastSeenStatus";
+
+import * as localization from "./localization";
+
 const app = express();
 app.use(express.json());
-app.listen(3001, () => console.log("Server working"));
+app.listen(3001);
 
 main();
+
+app.get("/api/formatted", (req: Request, res: Response) => {
+	const selectedLanguage = "en";
+	const lang = localization[selectedLanguage];
+	let response: string[] = [];
+	users.getData().forEach((user) => {
+		const { firstName, lastName, registrationDate, lastSeenDate, userId } = user;
+
+		response.push(
+			`${lang.user} ${userId}:\n${displayLastSeenStatus({
+				...user,
+				selectedLanguage,
+			})}\n${lang.firstName} - ${firstName}\n${lang.lastName} - ${lastName}\n${
+				lang.registrationDate
+			} - ${registrationDate ? new Date(registrationDate) : registrationDate}\n${
+				lang.lastSeenDate
+			} - ${lastSeenDate ? new Date(lastSeenDate) : lastSeenDate}\n`
+		);
+	});
+	return res.json(response);
+});
 
 app.get("/api/stats/users", getHistoricalDataForAll);
 
