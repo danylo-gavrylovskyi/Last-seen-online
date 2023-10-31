@@ -9,6 +9,7 @@ import { getDailyWeeklyTimeAverages } from "./controllers/getDailyWeeklyTimeAver
 import { main } from "./app";
 import { forgetUser } from "./controllers/forgetUser";
 import { createReport } from "./controllers/createReport";
+import { getReport } from "./controllers/getReport";
 
 const app = express();
 app.use(express.json());
@@ -31,5 +32,6 @@ app.get("/api/stats/user/average", getDailyWeeklyTimeAverages);
 app.get("/api/user/forget", forgetUser);
 
 app.post("/api/report/:reportName", createReport);
+app.get("/api/report/:reportName", getReport);
 
 export const server = app;
