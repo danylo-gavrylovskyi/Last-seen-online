@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { LastSeenUser } from "../types/lastSeenUser.interface";
 import { fetchAllUsers } from "../services/user.service";
 import { Users } from "../entities/users.class";
-import { ResponseReport } from "../types/report.interface";
+import { ResponseReport, UserReport } from "../types/report.interface";
 
 interface ReceivedReport {
 	userId: string;

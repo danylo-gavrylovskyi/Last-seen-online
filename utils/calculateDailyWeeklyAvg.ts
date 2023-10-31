@@ -1,26 +1,28 @@
-import { Request, Response } from "express";
+import { getWeekNumber } from "../controllers/predictUserOnlineStatus.controller";
 import { LastSeenUser } from "../types/lastSeenUser.interface";
 import { transformUser } from "../utils/transformer";
-import { users } from "../app";
-import { getWeekNumber } from "./predictUserOnlineStatus.controller";
 
 interface Averages {
 	weeklyAverage: number | null;
 	dailyAverage: number | null;
 }
 
-export const getDailyWeeklyTimeAverages = async (req: Request, res: Response) => {
-	const userId = req.query.userId as string;
-
-	const usersData = users.getData();
-
-	const averages = calculateAverages(usersData, userId);
-
-	return res.status(200).json(averages);
-};
-
-export const calculateAverages = (users: LastSeenUser[], userId: string): Averages => {
-	const userData = users.filter((entry) => entry.userId === userId);
+export const calculateDailyWeeklyAvg = (
+	users: LastSeenUser[],
+	userId: string,
+	fromDate: Date,
+	toDate: Date
+): Averages => {
+	const userData = users.filter((entry) => {
+		if (
+			entry.userId === userId &&
+			entry.lastSeenDate &&
+			entry.lastSeenDate.getTime() > fromDate.getTime() &&
+			entry.lastSeenDate.getTime() < toDate.getTime()
+		) {
+			return entry;
+		}
+	});
 
 	if (!userData.length) {
 		return { weeklyAverage: null, dailyAverage: null };
