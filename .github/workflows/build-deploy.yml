@@ -1,0 +1,19 @@
+name: Build and Deploy
+
+on:
+   push:
+      branches:
+         - master
+
+jobs:
+   build:
+      runs-on: ubuntu-latest
+      env:
+         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      steps:
+         - uses: actions/checkout@v3
+         - run: ssh -i "$SSH_PRIVATE_KEY" ubuntu@ec2-16-170-157-80.eu-north-1.compute.amazonaws.com
+         - run: cd Last-seen-online
+         - run: git fetch
+         - run: git pull
+         - run: npm run start
