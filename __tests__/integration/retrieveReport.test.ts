@@ -1,7 +1,6 @@
 import { retrieveReport } from "../../controllers/getReport";
 import { LastSeenUser } from "../../types/lastSeenUser.interface";
 import { UserReport } from "../../types/report.interface";
-import { calculateDailyWeeklyAvg } from "../../utils/calculateDailyWeeklyAvg";
 
 describe("retrieveReport", () => {
 	const reports: UserReport[] = [
@@ -58,7 +57,7 @@ describe("retrieveReport", () => {
 			new Date("2022-01-01T10:00:00Z"),
 			new Date("2024-08-01T15:00:00Z")
 		);
-		expect(res).toStrictEqual([]);
+		expect(res).toStrictEqual({ users: [] });
 	});
 
 	it("should return 'metrics' field with 'dailyAverage' and 'weeklyAverage' objects inside", () => {
@@ -72,8 +71,8 @@ describe("retrieveReport", () => {
 
 		if (!res) return undefined;
 
-		expect(res[0].metrics[0]).toHaveProperty("dailyAverage");
-		expect(res[0].metrics[1]).toHaveProperty("weeklyAverage");
+		expect(res.users[0].metrics[0]).toHaveProperty("dailyAverage");
+		expect(res.users[0].metrics[1]).toHaveProperty("weeklyAverage");
 	});
 
 	it("should return daily and weekly averages for a user", () => {
@@ -90,7 +89,7 @@ describe("retrieveReport", () => {
 
 		if (!res) return undefined;
 
-		expect(res[0].metrics[0].dailyAverage).toBe(expectedDailyAvg);
-		expect(res[0].metrics[1].weeklyAverage).toBe(expectedWeeklyAvg);
+		expect(res.users[0].metrics[0].dailyAverage).toBe(expectedDailyAvg);
+		expect(res.users[0].metrics[1].weeklyAverage).toBe(expectedWeeklyAvg);
 	});
 });
