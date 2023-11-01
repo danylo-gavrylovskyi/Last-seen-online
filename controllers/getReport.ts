@@ -11,6 +11,15 @@ interface ReceivedReport {
 	metrics: ResponseReport[];
 }
 
+interface ReportWithGlobalMetrics {
+	users: ReceivedReport[];
+	dailyAverage?: number | null;
+	weeklyAverage?: number | null;
+	total?: number | null;
+	min?: number | null;
+	max?: number | null;
+}
+
 export const getReport = async (req: Request, res: Response) => {
 	const reportName = req.params.reportName as string;
 	const from = req.query.date as string;
@@ -29,11 +38,18 @@ export const retrieveReport = (
 	reportName: string,
 	from: Date,
 	to: Date
-): ReceivedReport[] | undefined => {
+): ReportWithGlobalMetrics => {
 	const report = reports.find((rep) => rep.name === reportName);
-	if (!report) return [];
+	if (!report) return { users: [] };
 
-	let response: ReceivedReport[] = [];
+	const resUsersField: ReceivedReport[] = [];
+	const response: ReportWithGlobalMetrics = { users: [] };
+
+	let dailyTotal = 0;
+	let weeklyTotal = 0;
+	let globalTotalTime = 0;
+	let globalMin: number = 0;
+	let globalMax: number = 0;
 
 	report.users.forEach((userFromReport) => {
 		const userData = users.filter((user) => user.userId === userFromReport);
@@ -44,26 +60,39 @@ export const retrieveReport = (
 				case "dailyAverage": {
 					const averages = calculateDailyWeeklyAvg(userData, from, to);
 					metrics.push({ dailyAverage: averages.dailyAverage });
+					dailyTotal += averages.dailyAverage ?? 0;
 					break;
 				}
 				case "weeklyAverage": {
 					const averages = calculateDailyWeeklyAvg(userData, from, to);
 					metrics.push({ weeklyAverage: averages.weeklyAverage });
+					weeklyTotal += averages.weeklyAverage ?? 0;
 					break;
 				}
 				case "total": {
 					const total = getTotalOnlineTime(userData, from, to);
 					metrics.push({ total: total.totalTime });
+					globalTotalTime += total.totalTime ?? 0;
 					break;
 				}
 				case "min": {
 					const { min } = getMinMaxDaily(userData, from, to);
 					metrics.push({ min });
+					if (globalMin && min) {
+						if (globalMin > min) globalMin = min;
+					} else if (!globalMin && min) {
+						globalMin = min;
+					}
 					break;
 				}
 				case "max": {
 					const { max } = getMinMaxDaily(userData, from, to);
 					metrics.push({ max });
+					if (globalMax && max) {
+						if (globalMax < max) globalMax = max;
+					} else if (!globalMax && max) {
+						globalMax = max;
+					}
 					break;
 				}
 				default:
@@ -71,8 +100,15 @@ export const retrieveReport = (
 			}
 		});
 
-		response.push({ userId: userFromReport, metrics });
+		resUsersField.push({ userId: userFromReport, metrics });
 	});
+
+	if (dailyTotal) response.dailyAverage = dailyTotal / report.users.length;
+	if (weeklyTotal) response.weeklyAverage = weeklyTotal / report.users.length;
+	if (globalTotalTime) response.total = globalTotalTime;
+	if (globalMin) response.min = globalMin;
+	if (globalMax) response.max = globalMax;
+	response.users = resUsersField;
 
 	return response;
 };

@@ -1,4 +1,3 @@
-import { getWeekNumber } from "../controllers/predictUserOnlineStatus.controller";
 import { LastSeenUser } from "../types/lastSeenUser.interface";
 import { transformUser } from "../utils/transformer";
 
