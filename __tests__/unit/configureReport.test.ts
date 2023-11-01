@@ -1,4 +1,4 @@
-import { configureReport } from "../../controllers/createReport";
+import { configureReport } from "../../controllers/createReport.controller";
 import { LastSeenUser } from "../../types/lastSeenUser.interface";
 import { UserReport } from "../../types/report.interface";
 

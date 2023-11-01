@@ -1,4 +1,4 @@
-import { deleteDataAboutUser } from "../../controllers/forgetUser";
+import { deleteDataAboutUser } from "../../controllers/forgetUser.controller";
 import { LastSeenUser } from "../../types/lastSeenUser.interface";
 
 describe("forgetUser", () => {

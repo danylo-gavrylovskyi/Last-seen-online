@@ -9,9 +9,10 @@ import { predictOnlineUsersCount } from "./controllers/predictOnlineUsersCount.c
 import { predictUserOnlineStatus } from "./controllers/predictUserOnlineStatus.controller";
 import { getTotalOnlineTime } from "./controllers/getTotalOnlineTime.controller";
 import { getDailyWeeklyTimeAverages } from "./controllers/getDailyWeeklyTimeAverages.controller";
-import { forgetUser } from "./controllers/forgetUser";
-import { createReport } from "./controllers/createReport";
+import { forgetUser } from "./controllers/forgetUser.controller";
+import { createReport } from "./controllers/createReport.controller";
 import { getReport } from "./controllers/getReport";
+import { getAllReports } from "./controllers/getAllReports.controller";
 
 import { displayLastSeenStatus } from "./utils/displayLastSeenStatus";
 
@@ -60,5 +61,6 @@ app.get("/api/user/forget", forgetUser);
 
 app.post("/api/report/:reportName", createReport);
 app.get("/api/report/:reportName", getReport);
+app.get("/api/reports", getAllReports);
 
 export const server = app;
