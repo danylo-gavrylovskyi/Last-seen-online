@@ -24,6 +24,8 @@ export const server = app.listen(3001);
 
 main();
 
+app.get("/", (req, res) => res.json("My API running"));
+
 app.get("/api/formatted", (req: Request, res: Response) => {
 	const selectedLanguage = "en";
 	const lang = localization[selectedLanguage];
