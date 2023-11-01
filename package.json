@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start:dev": "nodemon index.ts",
-    "start": "npx ts-node app.ts",
+    "start": "npx ts-node index.ts",
     "test": "jest"
   },
   "devDependencies": {
