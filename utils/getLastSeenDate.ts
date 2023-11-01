@@ -1,4 +1,4 @@
-import * as constants from "../constants";
+import * as constants from "../types/constants";
 import * as localization from "../localization";
 
 export const getLastSeenDate = (date: Date, selectedLanguage: "en" | "ua"): string => {

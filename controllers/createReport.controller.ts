@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
-import { LastSeenUser } from "../types/lastSeenUser.interface";
+
 import { reports, users } from "../app";
+
+import { LastSeenUser } from "../types/lastSeenUser.interface";
 import { UserReport } from "../types/report.interface";
 
 export const createReport = async (req: Request, res: Response) => {
