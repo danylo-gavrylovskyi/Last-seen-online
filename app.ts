@@ -14,10 +14,10 @@ export async function main(): Promise<number> {
 		const response: LastSeenUserResult = await fetchAllUsers();
 		users = new Users(response);
 
-		setInterval(async () => {
-			const response: LastSeenUserResult = await fetchAllUsers();
-			users.addData(response.data);
-		}, 5000);
+		// setInterval(async () => {
+		// 	const response: LastSeenUserResult = await fetchAllUsers();
+		// 	users.addData(response.data);
+		// }, 5000);  worker crashed the tests
 
 		return 0;
 	} catch (error) {

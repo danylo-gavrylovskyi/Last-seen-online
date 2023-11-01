@@ -20,7 +20,7 @@ import * as localization from "./localization";
 
 const app = express();
 app.use(express.json());
-app.listen(3001);
+export const server = app.listen(3001);
 
 main();
 
@@ -62,5 +62,3 @@ app.get("/api/user/forget", forgetUser);
 app.post("/api/report/:reportName", createReport);
 app.get("/api/report/:reportName", getReport);
 app.get("/api/reports", getAllReports);
-
-export const server = app;

@@ -5,8 +5,10 @@ const requestWithSupertest = supertest(server);
 const USER_ID = "61fbd1a7-2358-9782-7f2f-25a0b8d0fc37";
 
 describe("e2e tests", () => {
-	beforeEach(() => {
-		setTimeout(() => {}, 1500);
+	afterAll((done) => {
+		server.close(() => {
+			done();
+		});
 	});
 
 	it("/api/stats/users", async () => {
