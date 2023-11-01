@@ -11,9 +11,9 @@ jobs:
       env:
          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       steps:
-         - uses: actions/checkout@v3
-         - run: ssh -i "$SSH_PRIVATE_KEY" ubuntu@ec2-16-170-157-80.eu-north-1.compute.amazonaws.com
-         - run: cd Last-seen-online
-         - run: git fetch
-         - run: git pull
-         - run: npm run start
+         - uses: actions/checkout@v2
+         - name: SSH into the server and update the repository
+           run: |
+              echo "$SSH_PRIVATE_KEY" > ssh_key.pem
+              chmod 600 ssh_key.pem
+              ssh -i ssh_key.pem ubuntu@ec2-16-170-157-80.eu-north-1.compute.amazonaws.com "cd Last-seen-online && git fetch && git pull && npm run start"
