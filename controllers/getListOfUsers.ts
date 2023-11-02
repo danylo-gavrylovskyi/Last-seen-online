@@ -6,7 +6,7 @@ import { transformUser } from '../utils/transformer';
 interface UserData {
   username: string;
   userId: string;
-  firstSeen: Date | null;
+  firstSeen: Date | null | undefined;
 }
 
 export const getListOfUsers = async (req: Request, res: Response) => {
@@ -26,9 +26,13 @@ export const getUserList = (users: LastSeenUser[]): UserData[] => {
     const userData = users.filter((entry) => entry.userId === user.userId);
     const transformedUser = transformUser(userData);
 
-    const firstSeen = transformedUser[0].login;
+    const firstOnline = transformedUser.find((data) => data.login);
 
-    listOfUsers.push({ username: user.nickname, userId: user.userId, firstSeen });
+    listOfUsers.push({
+      username: user.nickname,
+      userId: user.userId,
+      firstSeen: firstOnline?.login,
+    });
   });
 
   return listOfUsers;
