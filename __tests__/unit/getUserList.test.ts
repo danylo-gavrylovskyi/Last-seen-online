@@ -47,12 +47,12 @@ describe('getUserList', () => {
   });
 
   it('should have empty res when there is not user data', () => {
-    const res = getUserList(mockUsers);
+    const res = getUserList([]);
     expect(res).toStrictEqual([]);
   });
 
   it('should return res with correct time of first seen', () => {
     const res = getUserList(mockUsers);
-    expect(res[0].firstSeen).toBe(new Date('2023-01-01T10:00:00Z'));
+    expect(res[0].firstSeen).toStrictEqual(new Date('2023-01-01T10:00:00Z'));
   });
 });
