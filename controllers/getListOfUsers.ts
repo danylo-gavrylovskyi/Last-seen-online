@@ -15,4 +15,4 @@ export const getListOfUsers = async (req: Request, res: Response) => {
   return res.status(200).json(result);
 };
 
-export const getUserList = (): UserData => {};
+export const getUserList = (): UserData[] => {};
